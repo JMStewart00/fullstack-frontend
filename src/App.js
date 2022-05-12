@@ -8,6 +8,7 @@ function App() {
   return (
     <GlobalProvider>
       <NavBar />
+      <h1>{process.env.REACT_APP_MYENVVAR}</h1>
       <Outlet />
     </GlobalProvider>
   );
