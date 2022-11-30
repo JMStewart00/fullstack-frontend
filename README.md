@@ -3,8 +3,10 @@
 1. Gitpod urls not PUBLIC (either frontend or backend or both)
 2. Backend servers not running on gitpod side. (guilty!)
 3. Gitpod URL actually changing. Occasionally the url will update from one day to the next due to gitpod's servers changing addresses. If something isn't working double check the constants file. 
+4. Installing the packages in the wrong spot in your project. Need to `npm install` next to your package.json. 
 
 # Porting these services over for your project:
+1. `npm install axios jwt-decode`. You can choose to use install `react-router-dom` as well for URL specific routes on your front-end pages.
 1. Copy over the `services/` and `context/` directories to your project's `src/` folder.
 1. Wrap the App.js component in the `<GlobalProvider />` that you will import from the `context/` folder.
 1. Use the GlobalContext provider like a useState hook. Example below:
