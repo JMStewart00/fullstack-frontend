@@ -1,11 +1,12 @@
 # Identifying some "Gotchas"
-1. Gitpod urls not PUBLIC
-2. Backend servers not running on gitpod side.
+"gotchas" are things that seem like bugs but are really just missteps that we take along the way. 
+1. Gitpod urls not PUBLIC (either frontend or backend or both)
+2. Backend servers not running on gitpod side. (guilty!)
 3. Gitpod URL actually changing. Occasionally the url will update from one day to the next due to gitpod's servers changing addresses. If something isn't working double check the constants file. 
 
 # Porting these services over for your project:
 1. Copy over the `services/` and `context/` directories to your project's `src/` folder.
-1. Wrap the App.js component in the `<GlobalProvider />` that you import from the `context/` folder.
+1. Wrap the App.js component in the `<GlobalProvider />` that you will import from the `context/` folder.
 1. Use the GlobalContext provider like a useState hook. Example below:
 1. To use the axios request method create for you also refer to the example below.
 
@@ -22,14 +23,14 @@ function NavBar() {
 ## API Request Service Usage
 ```javascript
 
-// No need to include you API Base URL, just the end point. 
+// No need to include your API Base URL, just the end point. 
 // Remember your URL is in a 
-async function getConnections() {
+async function getSomeDataFromBackend() {
   let options = {
-    url: `/connections/?dog_target__user_id=${state.currentUser.user_id}`,
+    url: `/my-api-endpoint/?some_model__user_id=${state.currentUser.user_id}`, // just the endpoint
     method: 'GET', // sets the method
   } 
-  let resp = await request(options)
-  setSomeState(resp.data)
+  let resp = await request(options) // await the response and pass in this fancy object of request options
+  setSomeState(resp.data) // set the response 
 }
 ```
