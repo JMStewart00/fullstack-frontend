@@ -19,20 +19,44 @@ function NavBar() {
 ```javascript
 import request from 'path/to/services/api.request'
 
-// No need to include your API Base URL, just the end point. 
-// Remember your URL is in the api.constants file.
-// Also extra documentation for this object can be found https://axios-http.com/docs/req_config
-async function getSomeDataFromBackend() {
-  let options = {
-    url: `/my-api-endpoint/, // just the endpoint
-    method: 'GET', // sets the method
-    data: { // gets sent in the body of the request
-       key: value,
-       otherKey: otherValue,
-    }
-  } 
-  let resp = await request(options) // await the response and pass in this fancy object of request options
-  setSomeState(resp.data) // set the response 
+useEffect(() => {
+  // No need to include your API Base URL, just the end point. 
+  // Remember your URL is in the api.constants file.
+  // Also extra documentation for this object can be found https://axios-http.com/docs/req_config
+  async function getSomeDataFromBackend() {
+    let options = {
+      url: `/my-api-endpoint/, // just the endpoint
+      method: 'GET', // sets the method
+      data: { // gets sent in the body of the request
+         key: value,
+         otherKey: otherValue,
+      }
+    } 
+    let resp = await request(options) // await the response and pass in this fancy object of request options
+    setSomeState(resp.data) // set the response 
+  }
+  getSomeDataFromBackend()
+})
+```
+
+## Adding to the GlobalState
+The global state is defined in the GlobalState.js file in the const `intialState`
+
+If you want to add to this you can add a key/value pair with defaults. Additionally, you will call dispatch like this to update those values.
+
+```javascript
+import { useGlobalState } from "../context/GlobalState";
+
+function NavBar() {
+  const [ state, dispatch ] = useGlobalState();
+  
+  function handleClick() {
+      dispatch({
+        ...state,
+        myNewGlobalStateValue: newInformationInGlobalState
+      })
+  }
+  return <button onClick={handleClick}>Update Global State {state.myNewGlobalStateValue}</button>
 }
 ```
 
