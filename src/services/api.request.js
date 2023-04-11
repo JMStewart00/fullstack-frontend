@@ -67,7 +67,7 @@ client.interceptors.response.use(
 /**
  * Request Wrapper with default success/error actions
  */
-const request = async (opts) => {
+const request = (opts) => {
   let options = {
     ...opts,
     headers: authHeader(),
@@ -97,7 +97,7 @@ const request = async (opts) => {
     return Promise.reject(error.response || error.message);
   }
 
-  return await client(options)
+  return client(options)
     .then(onSuccess)
     .catch(onError);
 }
