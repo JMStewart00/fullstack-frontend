@@ -2,9 +2,9 @@ import {
   LOGIN_ENDPOINT,
   REFRESH_ENDPOINT,
   REGISTER_ENDPOINT,
-} from './auth.constants'
+} from './auth.constants';
 
-import request from "./api.request";
+import request from './api.request';
 
 class AuthService {
   constructor() {
@@ -12,22 +12,26 @@ class AuthService {
   }
 
   async login(username, password) {
-    let resp = await request({
-      url: LOGIN_ENDPOINT,
-      method: 'POST',
-      data:   {
-        username,
-        password
-      }
-    })
+    try {
+      const response = await request({
+        url: LOGIN_ENDPOINT,
+        method: 'POST',
+        data: {
+          username,
+          password,
+        },
+      });
 
-    if (resp.data.access) {
-      return this.setToken(resp)
+      if (response.data.access) {
+        return this.setToken(response);
+      }
+    } catch (error) {
+      return error.response;
     }
   }
 
   logout() {
-    localStorage.removeItem("user");
+    localStorage.removeItem('user');
   }
 
   async register({
@@ -35,39 +39,49 @@ class AuthService {
     email,
     password,
     firstName,
-    lastName
+    lastName,
   }) {
-    await request({
-      url: REGISTER_ENDPOINT,
-      method: 'POST',
-      data: {
-        username,
-        email,
-        password,
-        first_name: firstName,
-        last_name: lastName,
-      }
-    })
-    .then(() => {
-      this.login(username, password)
-    })
+    try {
+      await request({
+        url: REGISTER_ENDPOINT,
+        method: 'POST',
+        data: {
+          username,
+          email,
+          password,
+          first_name: firstName,
+          last_name: lastName,
+        },
+      });
+
+      await this.login(username, password);
+    } catch (error) {
+      return error.response;
+    }
   }
 
-  setToken(resp) {
-    localStorage.setItem("user", JSON.stringify(resp.data));
-    return resp.data
+  setToken(response) {
+    localStorage.setItem('user', JSON.stringify(response.data));
+    return response.data;
   }
 
   async refreshToken() {
-    let user = JSON.parse(localStorage.getItem('user'));
-    if (user.refresh) {
-      return await request({
-        url: REFRESH_ENDPOINT,
-        method: 'POST',
-        data: {
-          refresh: user.refresh
-        }
-      })
+    try {
+      const user = JSON.parse(localStorage.getItem('user'));
+
+      if (user.refresh) {
+        const response = await request({
+          url: REFRESH_ENDPOINT,
+          method: 'POST',
+          data: {
+            refresh: user.refresh,
+          },
+        });
+
+        return response.data;
+      }
+    } catch (error) {
+      return error.response;
     }
   }
 }
